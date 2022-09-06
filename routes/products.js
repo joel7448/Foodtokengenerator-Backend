@@ -54,7 +54,7 @@ res.status(200).json("deleted")
     }
 })
 
-router.put("/menu/:id",async function(req,res){
+router.put("/menu/:id",authenticate,async function(req,res){
     try{
 const product = await Product.findByIdAndUpdate({_id:req.params.id},{
     $set:{ Productname : req.body.Productname,
@@ -73,6 +73,15 @@ console.log(err);
     }
 })
 
+router.get("/menu/:id",authenticate,async function(req,res){
+    try{
+    const product = await Product.findById({_id:req.params.id});
+    res.status(200).json(product);
+}
+catch(err){
+    console.log(err);
+}
 
+})
 
 module.exports = router

@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const Mail = require("../models/Mail");
 const authenticate = require("../verifytoken")
 const nodemailer = require("nodemailer");
+const MailMessage = require("nodemailer/lib/mailer/mail-message");
 
 
 
@@ -75,6 +76,20 @@ const month = new Date().getMonth();
       catch (err) {
         res.status(500).json(err);
       }
+})
+
+
+router.get("/token/:id",authenticate,async function(req,res){
+  try{
+      const menu = await Mail.find({email:req.params.id});
+      res.status(200).json(menu);
+    
+
+  }
+  catch(err){
+  
+res.status(500).json(err);
+  }
 })
 
 
