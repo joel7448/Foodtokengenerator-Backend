@@ -19,11 +19,13 @@ if(find.length==0){
 else{
     element = find[find.length-1].order_token+1;
 }
-
+console.log(element);
 const months = ["Jan","Feb","Mar","Apr","May","Jun","July","Aug","Sep","Oct","Nov","Dec"];
 const month = new Date().getMonth();
     const newMail = new Mail({
        email : req.params.id,
+       id:element,
+       status:"not ready",
        Amount:req.body.amt,
        order_token:element,
        month:months[month]
@@ -93,4 +95,52 @@ res.status(500).json(err);
 })
 
 
+//for admin dashboard
+router.get("/token",async function(req,res){
+  try{
+    const orders = await Mail.find();
+    res.status(200).json(orders);
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
+})
+
+
+router.get("/token/filter/:id",async function(req,res){
+  try{
+const token = await Mail.findOne({order_token:req.params.id});
+res.status(200).json(token);
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
+})
+
+//Order token ready
+router.put("/token/:id",async function(req, res){
+  try{
+    const result = await Mail.findOneAndUpdate({order_token:req.params.id},{
+      $set:{status:"ready"}
+    }
+    );
+    res.status(200).json(result);
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
+})
+
+//Delete order
+
+router.delete("/token/:id",async function(req, res){
+  try{
+    const result = await Mail.findOneAndDelete({order_token:req.params.id});
+    res.status(200).json(result);
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
+
+    })
  module.exports = router
