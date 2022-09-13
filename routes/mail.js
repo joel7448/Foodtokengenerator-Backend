@@ -96,7 +96,7 @@ res.status(500).json(err);
 
 
 //for admin dashboard
-router.get("/token",async function(req,res){
+router.get("/token",authenticate,async function(req,res){
   try{
     const orders = await Mail.find();
     res.status(200).json(orders);
@@ -107,7 +107,7 @@ router.get("/token",async function(req,res){
 })
 
 
-router.get("/token/filter/:id",async function(req,res){
+router.get("/token/filter/:id",authenticate,async function(req,res){
   try{
 const token = await Mail.findOne({order_token:req.params.id});
 res.status(200).json(token);
